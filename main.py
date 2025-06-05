@@ -5,6 +5,8 @@ import pygame
 import random
 #needed for splat creation and drawing
 import splat
+#needed for background
+import background as bg
 
 #starts the module
 pygame.init()
@@ -25,6 +27,7 @@ pygame.display.set_caption("Paintball")
 ''' VARIABLE SET UP'''
 #color code constants, for colors that will never change
 WHITE = (255, 255, 255)
+GRAY = (175, 175, 175)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
@@ -34,13 +37,16 @@ BLUE = (0, 0, 255)
 PINK = (255, 0, 255)
 
 #list to store the colors, for random selection
-colors = [WHITE, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
+colors = [WHITE, BLACK, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
 
 #empty list to store splats
 splats = []
 
 #load in the paintball sound effect
 gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
+
+#create background object
+background = bg.Background(GRAY)
 
 ''' GAME LOOP SET UP '''
 #clock to manage the frame rate
@@ -69,12 +75,12 @@ while keep_playing:
             keep_playing = False
     
     #clear screen before anything else
-    screen.fill(BLACK)
+    background.draw_background(screen)
 
     ''' DRAW ALL ITEMS HERE '''
     for splat_object in splats:
         splat_object.draw_splat(screen)
-
+    
     #updates the screen
     pygame.display.update()
 
