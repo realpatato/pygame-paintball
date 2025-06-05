@@ -8,6 +8,8 @@ import splat
 
 #starts the module
 pygame.init()
+#starts the audio module
+pygame.mixer.init()
 
 ''' WINDOW SET UP '''
 #variables for screen size for easy changing
@@ -37,6 +39,9 @@ colors = [WHITE, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
 #empty list to store splats
 splats = []
 
+#load in the paintball sound effect
+gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
+
 ''' GAME LOOP SET UP '''
 #clock to manage the frame rate
 clock = pygame.time.Clock()
@@ -51,6 +56,8 @@ while keep_playing:
     for event in pygame.event.get():
         #check for mouse click
         if event.type == pygame.MOUSEBUTTONDOWN:
+            #play sound effect
+            pygame.mixer.Sound.play(gun_sound)
             #get the mouse position
             mouse_pos = pygame.mouse.get_pos()
             #create and add a Splat object to the splat list

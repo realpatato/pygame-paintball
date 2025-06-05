@@ -8,13 +8,15 @@ import math
 import random
 
 ''' SPLAT CLASS '''
-class Splat():
+class Splat:
     def __init__(self, color, center):
+        ''' Initializes Splat object with a color and center, and determines its points '''
         self._color = color
         self._center = center
         self._splat_points = self.get_splat_points()
     
     def get_splat_points(self):
+        ''' Determines points by creating random radii and finding sines and cosines '''
         points = []
         angle = 0
         while angle < math.pi*2:
@@ -26,4 +28,5 @@ class Splat():
         return points
 
     def draw_splat(self, surface):
+        ''' Draws a splat on a given surface '''
         pygame.draw.polygon(surface, self._color, self._splat_points)
