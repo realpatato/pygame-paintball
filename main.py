@@ -66,7 +66,6 @@ while keep_playing:
             mouse_pos = pygame.mouse.get_pos()
             #prevents clicking on scoreboard area
             if mouse_pos[1] < 650:
-                print("Hello?")
                 #play sound effect
                 pygame.mixer.Sound.play(gun_sound)
                 #create and add a Splat object to the splat list
