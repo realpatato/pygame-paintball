@@ -37,7 +37,7 @@ BLUE = (0, 0, 255)
 PINK = (255, 0, 255)
 
 #list to store the colors, for random selection
-colors = [WHITE, BLACK, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
+colors = [WHITE, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
 
 #empty list to store splats
 splats = []
@@ -62,12 +62,15 @@ while keep_playing:
     for event in pygame.event.get():
         #check for mouse click
         if event.type == pygame.MOUSEBUTTONDOWN:
-            #play sound effect
-            pygame.mixer.Sound.play(gun_sound)
             #get the mouse position
             mouse_pos = pygame.mouse.get_pos()
-            #create and add a Splat object to the splat list
-            splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
+            #prevents clicking on scoreboard area
+            if mouse_pos[1] < 650:
+                print("Hello?")
+                #play sound effect
+                pygame.mixer.Sound.play(gun_sound)
+                #create and add a Splat object to the splat list
+                splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
 
         #check if the player has quit
         if event.type == pygame.QUIT:
@@ -80,6 +83,8 @@ while keep_playing:
     ''' DRAW ALL ITEMS HERE '''
     for splat_object in splats:
         splat_object.draw_splat(screen)
+
+    pygame.draw.rect(screen, BLACK, [0, 625, 1000, 750])
     
     #updates the screen
     pygame.display.update()
