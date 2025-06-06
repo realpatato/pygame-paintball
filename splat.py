@@ -14,6 +14,7 @@ class Splat:
         self._color = color
         self._center = center
         self._splat_points = self.get_splat_points()
+        self._enemy = None
     
     def get_splat_points(self):
         ''' Determines points by creating random radii and finding sines and cosines '''

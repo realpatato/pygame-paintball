@@ -79,19 +79,20 @@ while keep_playing:
         if event.type == pygame.QUIT:
             #set control variable to false
             keep_playing = False
-
+    
     enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], 0, 0)
     
     #draw background before anything else
     background.draw_background(screen)
+    
+    enemy1.draw_enemy(screen)
+
 
     ''' DRAW ALL ITEMS HERE '''
     for splat_object in splats:
         splat_object.draw_splat(screen)
 
     pygame.draw.rect(screen, BLACK, [0, 625, 1000, 750])
-
-    enemy1.draw_enemy(screen)
     
     #updates the screen
     pygame.display.update()
