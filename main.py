@@ -47,10 +47,11 @@ splats = []
 #load in the paintball sound effect
 gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
 
-enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], 0, 0)
-
 #create background object
 background = bg.Background(WHITE)
+
+#timer variable
+timer = 179
 
 ''' GAME LOOP SET UP '''
 #clock to manage the frame rate
@@ -62,6 +63,17 @@ keep_playing = True
 ''' GAME LOOP '''
 #the loop itself, checks if the loop is supposed to be going
 while keep_playing:
+    #advance the timer
+    timer += 1
+    #checks if its been ~3 seconds
+    if timer == 180:
+        #gets a random
+        rand_scale_mult = random.random() + 0.25
+        #basically changes the color of the enemy
+        enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], (rand_scale_mult * 410, rand_scale_mult * 540), 0, 0)
+        #resets timer
+        timer = 0
+
     #checking for any events (quitting, clicking, key press)
     for event in pygame.event.get():
         #check for mouse click
@@ -79,8 +91,6 @@ while keep_playing:
         if event.type == pygame.QUIT:
             #set control variable to false
             keep_playing = False
-    
-    enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], 0, 0)
     
     #draw background before anything else
     background.draw_background(screen)

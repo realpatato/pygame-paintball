@@ -4,13 +4,13 @@
 import pygame
 
 class Enemy:
-    def __init__(self, color, x, y):
+    def __init__(self, color, size, x, y):
         ''' Initializes enemy with a sprite, plus an x and y position '''
-        self._sprite = self.gen_sprite(color)
+        self._sprite = self.gen_sprite(color, size)
         self._x = x
         self._y = y
     
-    def gen_sprite(self, color):
+    def gen_sprite(self, color, size):
         ''' Replaces the default color of the sprite with the enemy's color '''
         #loads the default sprite
         sprite = pygame.image.load("sprites/paintballer.png")
@@ -20,6 +20,7 @@ class Enemy:
         sprite_pixels.replace((77, 109, 243), color)
         #deletes the pixel array to unlock the surface
         del sprite_pixels
+        sprite = pygame.transform.scale(sprite, size)
         #returns the sprite
         return sprite
     
