@@ -65,8 +65,6 @@ do_timer = True
 score = 0
 #variable to hold the score board
 scoreboard = sb.Scoreboard(score)
-#adds scoreboard to draw objects
-draw_objects.append(scoreboard)
 
 ''' FUNCTIONS '''
 def spawn_enemy():
@@ -131,6 +129,8 @@ while keep_playing:
                         enemy_object._spawning = False
                         #adds points to the score based on how long it took for you to click
                         score  += (160 - timer) * 20
+                        #updates the scoreboard with the points
+                        scoreboard.update_score(score)
                         #sets timer to 0 
                         timer = 0
                         #pauses the timer
@@ -192,7 +192,9 @@ while keep_playing:
         object.draw_self(screen)
 
     #draws box for where the score goes
-    pygame.draw.rect(screen, BLACK, [0, 625, 1000, 750])
+    pygame.draw.rect(screen, BLACK, [0, 654, 1000, 750])
+    #draws the scoreboard
+    scoreboard.draw_self(screen)
     
     #updates the screen
     pygame.display.update()

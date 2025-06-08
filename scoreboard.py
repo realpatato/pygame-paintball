@@ -6,14 +6,14 @@ import pygame
 ''' SCOREBOARD CLASS '''
 class Scoreboard:
     def __init__(self, score):
-        self._sprite_names = self.get_sprite_names()
-        self._sprites = self.parse_spritesheet(self._sprite_names)
+        self._sprites = self.parse_spritesheet()
         self._text = "SCORE:" + str(score)
     
     def get_sprite_names(self):
+        ''' Gets the '''
         return ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "S", "C", "O", "R", "E", ":"]
 
-    def parse_spritesheet(self, sprite_names):
+    def parse_spritesheet(self):
         ''' Parses the text spritesheet and stores the sprites'''
         #defines height since the height is the same everytime
         height = 16
@@ -21,6 +21,9 @@ class Scoreboard:
         widths = [
             20, 12, 20, 20, 20, 20, 20, 20, 20, 20, #0-9
             18, 18, 22, 18, 18, 14 #SCORE:
+        ]
+        sprite_names = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "S", "C", "O", "R", "E", ":"
         ]
         #creates an empty dictionary to hold the sprites
         sprites={}
@@ -46,7 +49,10 @@ class Scoreboard:
             sprites[sprite_names[i]] = surface
         #returns the sprites
         return sprites
-    
+
+    def update_score(self, score):
+        self._text = "SCORE:" + str(score)
+
     def draw_self(self, surface):
         ''' Draws the scoreboard '''
         offset = 0
@@ -55,4 +61,4 @@ class Scoreboard:
             char = self._text[char_index]
             char_size = self._sprites[char].get_size()
             offset += char_size[0]
-            surface.blit(self._sprites[char], (1000 - offset, 0))
+            surface.blit(self._sprites[char], (1000 - offset, 678))
