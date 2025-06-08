@@ -55,10 +55,17 @@ class Scoreboard:
 
     def draw_self(self, surface):
         ''' Draws the scoreboard '''
+        #offset for each character
         offset = 0
+        #iterates over each character in the text
         for i in range(len(self._text)):
+            #gets the final index
             char_index = 0 - (i + 1)
+            #gets the character at that index
             char = self._text[char_index]
+            #gets its size
             char_size = self._sprites[char].get_size()
+            #adds the x size to the offset
             offset += char_size[0]
+            #draws the character given the offset
             surface.blit(self._sprites[char], (1000 - offset, 678))
