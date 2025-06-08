@@ -94,8 +94,24 @@ while keep_playing:
             if mouse_pos[1] < 650:
                 #play sound effect
                 pygame.mixer.Sound.play(gun_sound)
-                #create and add a Splat object to the splat list
-                splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
+                for i in range(0, len(enemies)):
+                    #ensures it starts at the very end, and goes to the front
+                    index = 0 - (i + 1)
+                    #gets the object from the list with index
+                    enemy_object = enemies[index]
+                    #checking for where the mouse is in the sprite rect
+                    pos_in_enemy_mask = (mouse_pos[0] - enemy_object._rect.x, mouse_pos[1] - enemy_object._rect.y)
+                    #checks if the mouse is with the sprite basically
+                    if enemy_object._rect.collidepoint(*mouse_pos) and enemy_object._mask.get_at(pos_in_enemy_mask):
+                        #create and add a Splat object to the splat list with enemy
+                        splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
+                        #adds the object to the enemies list of connected splats
+                        enemy_object._connected_splats.append(splats[len(splats) - 1])
+                        #breaks out of the loop since an enemy has already been found
+                        break
+                    else:
+                        #create and add a Splat object to the splat list with no enemy
+                        splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
                 #adds the splat to the list of draw objects
                 draw_objects.append(splats[len(splats) - 1])
 
@@ -107,19 +123,33 @@ while keep_playing:
     #moves the enemies before drawing them
     for enemy_object in enemies:
         #checks if the enemy is spawning in and if the y position is high enough
-        if enemy_object._spawning == True and enemy_object._y > (650 - enemy_object.get_max_height()):
+        if enemy_object._spawning == True and enemy_object._rect.y > (650 - enemy_object.get_max_height()):
             #make the position higher up on the screen
             enemy_object.mod_y(-5)
+            #iterates over each connected splat
+            for splat_object in enemy_object._connected_splats:
+                #has any splats move up with the enemy
+                splat_object.mod_y(-5)
         #checks if the enemy needs to be going away
         elif enemy_object._spawning == False:
             #makes the enemy go lower down on the screen
             enemy_object.mod_y(5)
+            #iterates over each connected splat
+            for splat_object in enemy_object._connected_splats:
+                #has any splats move down with the enemy
+                splat_object.mod_y(5)
             #if the y is low enough on the screen
-            if enemy_object._y > 700:
+            if enemy_object._rect.y > 700:
                 #remove the enemy from the list
                 enemies.remove(enemy_object)
                 #remove the enemy from the draw list too
                 draw_objects.remove(enemy_object)
+                #iterates over the splats connected to the enemy
+                for splat_object in enemy_object._connected_splats:
+                    #removes it from the splats list
+                    splats.remove(splat_object)
+                    #removes it from the drawn objects
+                    draw_objects.remove(splat_object)
     
     #draw background before anything else
     background.draw_background(screen)

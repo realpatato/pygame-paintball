@@ -7,9 +7,12 @@ class Enemy:
     def __init__(self, color, rand_scale_mult, x, y):
         ''' Initializes enemy with a sprite, plus an x and y position '''
         self._sprite = self.gen_sprite(color, (rand_scale_mult * 410, rand_scale_mult * 540))
+        #rect is needed for getting a collide point
+        self._rect = self._sprite.get_rect(topleft = (x, y))
+        #need in order to find active pixels on the sprite
+        self._mask = pygame.mask.from_surface(self._sprite)
         self._scale_mult = rand_scale_mult
-        self._x = x
-        self._y = y
+        self._connected_splats = []
         self._spawning = True
     
     def gen_sprite(self, color, size):
@@ -33,8 +36,8 @@ class Enemy:
     
     def mod_y(self, num):
         ''' Adds a given value to the x position '''
-        self._y += num
+        self._rect.y += num
     
     def draw_self(self, surface):
         ''' Draws the enemy to the screen '''
-        surface.blit(self._sprite, (self._x, self._y))
+        surface.blit(self._sprite, self._rect)

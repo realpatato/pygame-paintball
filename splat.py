@@ -14,7 +14,6 @@ class Splat:
         self._color = color
         self._center = center
         self._splat_points = self.get_splat_points()
-        self._enemy = None
     
     def get_splat_points(self):
         ''' Determines points by creating random radii and finding sines and cosines '''
@@ -24,9 +23,16 @@ class Splat:
             radius = 5 + random.random() * 20
             x_pos = radius * math.cos(angle) + self._center[0]
             y_pos = radius * math.sin(angle) + self._center[1]
-            points.append((x_pos, y_pos))
+            points.append([x_pos, y_pos])
             angle+=0.1
         return points
+    
+    def mod_y(self, num):
+        ''' Modifies the y position by a given value '''
+        #iterates over each point
+        for point in self._splat_points:
+            #subtracts the given number from the y
+            point[1] += num
 
     def draw_self(self, surface):
         ''' Draws a splat on a given surface '''
