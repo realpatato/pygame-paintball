@@ -9,6 +9,8 @@ import splat
 import background as bg
 #needed for enemies
 import enemy
+#needed for scoreboard
+import scoreboard as sb
 
 #starts the module
 pygame.init()
@@ -61,6 +63,10 @@ do_timer = True
 
 #variable to hold score
 score = 0
+#variable to hold the score board
+scoreboard = sb.Scoreboard(score)
+#adds scoreboard to draw objects
+draw_objects.append(scoreboard)
 
 ''' FUNCTIONS '''
 def spawn_enemy():
