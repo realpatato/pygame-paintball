@@ -4,11 +4,13 @@
 import pygame
 
 class Enemy:
-    def __init__(self, color, size, x, y):
+    def __init__(self, color, rand_scale_mult, x, y):
         ''' Initializes enemy with a sprite, plus an x and y position '''
-        self._sprite = self.gen_sprite(color, size)
+        self._sprite = self.gen_sprite(color, (rand_scale_mult * 410, rand_scale_mult * 540))
+        self._scale_mult = rand_scale_mult
         self._x = x
         self._y = y
+        self._spawning = True
     
     def gen_sprite(self, color, size):
         ''' Replaces the default color of the sprite with the enemy's color '''
@@ -24,6 +26,14 @@ class Enemy:
         sprite = pygame.transform.scale(sprite, size)
         #returns the sprite
         return sprite
+    
+    def get_max_height(self):
+        ''' Gets the max height that the sprite can go to '''
+        return self._scale_mult * 300
+    
+    def mod_y(self, num):
+        ''' Adds a given value to the x position '''
+        self._y += num
     
     def draw_enemy(self, surface):
         ''' Draws the enemy to the screen '''

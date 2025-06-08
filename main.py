@@ -43,6 +43,8 @@ colors = [BLACK, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
 
 #empty list to store splats
 splats = []
+#empty list to store enemies
+enemies = []
 
 #load in the paintball sound effect
 gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
@@ -51,7 +53,7 @@ gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
 background = bg.Background(WHITE)
 
 #timer variable (starts at 179 so an enemy is instantly created)
-timer = 179
+timer = 119
 
 ''' GAME LOOP SET UP '''
 #clock to manage the frame rate
@@ -65,12 +67,16 @@ keep_playing = True
 while keep_playing:
     #advance the timer
     timer += 1
-    #checks if its been ~3 seconds
-    if timer == 180:
+    #checks if its been ~2 seconds
+    if timer == 120:
         #gets a random scale multiplier
         rand_scale_mult = random.random() + 0.25
+        #checks if there are 4 or more enemies
+        if len(enemies) > 3:
+            #sets spawning to false to make the enemy go down
+            enemies[0]._spawning = False
         #basically changes the color and scale of the enemy
-        enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], (rand_scale_mult * 410, rand_scale_mult * 540), 0, 0)
+        enemies.append(enemy.Enemy(colors[random.randint(1, len(colors) - 1)], rand_scale_mult, random.randint(0, 750), 650))
         #resets timer
         timer = 0
 
@@ -94,11 +100,24 @@ while keep_playing:
     
     #draw background before anything else
     background.draw_background(screen)
-    
-    #draws the enemy
-    enemy1.draw_enemy(screen)
 
     ''' DRAW ALL ITEMS HERE '''
+    #draws the enemies
+    for enemy_object in enemies:
+        #draws each one to the screen
+        enemy_object.draw_enemy(screen)
+        #checks if the enemy is spawning in and if the y position is high enough
+        if enemy_object._spawning == True and enemy_object._y > (650 - enemy_object.get_max_height()):
+            #make the position higher up on the screen
+            enemy_object.mod_y(-5)
+        #checks if the enemy needs to be going away
+        elif enemy_object._spawning == False:
+            #makes the enemy go lower down on the screen
+            enemy_object.mod_y(5)
+            #if the y is low enough on the screen
+            if enemy_object._y > 700:
+                #remove the enemy from the list
+                enemies.remove(enemy_object)
     #iterates over all the splats
     for splat_object in splats:
         #draws each one to the screen
