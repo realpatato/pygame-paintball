@@ -20,6 +20,7 @@ class Enemy:
         sprite_pixels.replace((77, 109, 243), color)
         #deletes the pixel array to unlock the surface
         del sprite_pixels
+        #scales the sprite
         sprite = pygame.transform.scale(sprite, size)
         #returns the sprite
         return sprite

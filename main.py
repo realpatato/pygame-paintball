@@ -50,7 +50,7 @@ gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
 #create background object
 background = bg.Background(WHITE)
 
-#timer variable
+#timer variable (starts at 179 so an enemy is instantly created)
 timer = 179
 
 ''' GAME LOOP SET UP '''
@@ -67,9 +67,9 @@ while keep_playing:
     timer += 1
     #checks if its been ~3 seconds
     if timer == 180:
-        #gets a random
+        #gets a random scale multiplier
         rand_scale_mult = random.random() + 0.25
-        #basically changes the color of the enemy
+        #basically changes the color and scale of the enemy
         enemy1 = enemy.Enemy(colors[random.randint(1, len(colors) - 1)], (rand_scale_mult * 410, rand_scale_mult * 540), 0, 0)
         #resets timer
         timer = 0
@@ -95,13 +95,16 @@ while keep_playing:
     #draw background before anything else
     background.draw_background(screen)
     
+    #draws the enemy
     enemy1.draw_enemy(screen)
 
-
     ''' DRAW ALL ITEMS HERE '''
+    #iterates over all the splats
     for splat_object in splats:
+        #draws each one to the screen
         splat_object.draw_splat(screen)
 
+    #draws box for where the score goes
     pygame.draw.rect(screen, BLACK, [0, 625, 1000, 750])
     
     #updates the screen
