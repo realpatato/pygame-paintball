@@ -28,6 +28,6 @@ class Splat:
             angle+=0.1
         return points
 
-    def draw_splat(self, surface):
+    def draw_self(self, surface):
         ''' Draws a splat on a given surface '''
         pygame.draw.polygon(surface, self._color, self._splat_points)

@@ -45,6 +45,8 @@ colors = [BLACK, RED, GREEN, BLUE, YELLOW, CYAN, PINK]
 splats = []
 #empty list to store enemies
 enemies = []
+#empty list to store all drawn objects
+draw_objects = []
 
 #load in the paintball sound effect
 gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
@@ -77,6 +79,8 @@ while keep_playing:
             enemies[0]._spawning = False
         #basically changes the color and scale of the enemy
         enemies.append(enemy.Enemy(colors[random.randint(1, len(colors) - 1)], rand_scale_mult, random.randint(0, 750), 650))
+        #adds the enemy to the list to be drawn
+        draw_objects.append(enemies[len(enemies) - 1])
         #resets timer
         timer = 0
 
@@ -92,20 +96,16 @@ while keep_playing:
                 pygame.mixer.Sound.play(gun_sound)
                 #create and add a Splat object to the splat list
                 splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
+                #adds the splat to the list of draw objects
+                draw_objects.append(splats[len(splats) - 1])
 
         #check if the player has quit
         if event.type == pygame.QUIT:
             #set control variable to false
             keep_playing = False
     
-    #draw background before anything else
-    background.draw_background(screen)
-
-    ''' DRAW ALL ITEMS HERE '''
-    #draws the enemies
+    #moves the enemies before drawing them
     for enemy_object in enemies:
-        #draws each one to the screen
-        enemy_object.draw_enemy(screen)
         #checks if the enemy is spawning in and if the y position is high enough
         if enemy_object._spawning == True and enemy_object._y > (650 - enemy_object.get_max_height()):
             #make the position higher up on the screen
@@ -118,10 +118,16 @@ while keep_playing:
             if enemy_object._y > 700:
                 #remove the enemy from the list
                 enemies.remove(enemy_object)
-    #iterates over all the splats
-    for splat_object in splats:
-        #draws each one to the screen
-        splat_object.draw_splat(screen)
+                #remove the enemy from the draw list too
+                draw_objects.remove(enemy_object)
+    
+    #draw background before anything else
+    background.draw_background(screen)
+
+    ''' DRAW ALL ITEMS HERE '''
+    #draws the game objects
+    for object in draw_objects:
+        object.draw_self(screen)
 
     #draws box for where the score goes
     pygame.draw.rect(screen, BLACK, [0, 625, 1000, 750])

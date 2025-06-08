@@ -35,6 +35,6 @@ class Enemy:
         ''' Adds a given value to the x position '''
         self._y += num
     
-    def draw_enemy(self, surface):
+    def draw_self(self, surface):
         ''' Draws the enemy to the screen '''
         surface.blit(self._sprite, (self._x, self._y))
