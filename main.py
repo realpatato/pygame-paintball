@@ -55,7 +55,21 @@ gun_sound = pygame.mixer.Sound("audio/paintball_gun.wav")
 background = bg.Background(WHITE)
 
 #timer variable (starts at 179 so an enemy is instantly created)
-timer = 119
+timer = 0
+#timer variable to control if timer should count down
+do_timer = True
+
+#variable to hold score
+score = 0
+
+''' FUNCTIONS '''
+def spawn_enemy():
+    #gets a random scale multiplier
+    rand_scale_mult = random.random() + 0.25
+    #basically changes the color and scale of the enemy
+    enemies.append(enemy.Enemy(colors[random.randint(1, len(colors) - 1)], rand_scale_mult, random.randint(0, 750), 650))
+    #adds the enemy to the list to be drawn
+    draw_objects.append(enemies[len(enemies) - 1])
 
 ''' GAME LOOP SET UP '''
 #clock to manage the frame rate
@@ -64,25 +78,25 @@ clock = pygame.time.Clock()
 #variable to control if the game loop is running or not
 keep_playing = True
 
+#spawn an enemy before starting
+spawn_enemy()
+
 ''' GAME LOOP '''
 #the loop itself, checks if the loop is supposed to be going
 while keep_playing:
-    #advance the timer
-    timer += 1
-    #checks if its been ~2 seconds
-    if timer == 120:
-        #gets a random scale multiplier
-        rand_scale_mult = random.random() + 0.25
-        #checks if there are 4 or more enemies
-        if len(enemies) > 3:
-            #sets spawning to false to make the enemy go down
-            enemies[0]._spawning = False
-        #basically changes the color and scale of the enemy
-        enemies.append(enemy.Enemy(colors[random.randint(1, len(colors) - 1)], rand_scale_mult, random.randint(0, 750), 650))
-        #adds the enemy to the list to be drawn
-        draw_objects.append(enemies[len(enemies) - 1])
-        #resets timer
+    #checks if it SHOULD advance the timer
+    if do_timer:
+        #advance the timer
+        timer += 1
+    
+    #checks if its been ~3 seconds
+    if timer == 160:
+        #makes the enemy despawn
+        enemies[0]._spawning = False
+        #resets the timer
         timer = 0
+        #pauses the timer
+        do_timer = False
 
     #checking for any events (quitting, clicking, key press)
     for event in pygame.event.get():
@@ -107,6 +121,14 @@ while keep_playing:
                         splats.append(splat.Splat(colors[random.randint(0, len(colors) - 1)], mouse_pos))
                         #adds the object to the enemies list of connected splats
                         enemy_object._connected_splats.append(splats[len(splats) - 1])
+                        #makes enemy go away after they get shot
+                        enemy_object._spawning = False
+                        #adds points to the score based on how long it took for you to click
+                        score  += (160 - timer) * 20
+                        #sets timer to 0 
+                        timer = 0
+                        #pauses the timer
+                        do_timer = False
                         #breaks out of the loop since an enemy has already been found
                         break
                     else:
@@ -144,6 +166,10 @@ while keep_playing:
                 enemies.remove(enemy_object)
                 #remove the enemy from the draw list too
                 draw_objects.remove(enemy_object)
+                #spawns a new enemy since the old one is gone
+                spawn_enemy()
+                #unpause the timer once the enemy has been spawned in
+                do_timer = True
                 #iterates over the splats connected to the enemy
                 for splat_object in enemy_object._connected_splats:
                     #removes it from the splats list
